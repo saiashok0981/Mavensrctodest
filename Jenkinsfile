@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.8.6'     // Use the name defined in Jenkins -> Global Tool Configuration
-        jdk 'OpenJDK 11'        // Adjust to your configured JDK version
+        maven 'Maven'     // Use the actual name configured in Jenkins
+        jdk 'JDK'         // Use the actual name configured in Jenkins
     }
 
     stages {
@@ -28,7 +28,7 @@ pipeline {
 
         stage('Run Application') {
             steps {
-                // Automatically run the generated jar file (ignores original-jar or test-jars)
+                // Automatically run the generated jar
                 sh 'java -jar $(find target -type f -name "*.jar" ! -name "*original*" | head -n 1)'
             }
         }
