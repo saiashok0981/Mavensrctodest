@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven'     // Use the actual name configured in Jenkins
-        jdk 'JDK'         // Use the actual name configured in Jenkins
+        maven 'Maven'     // Replace with your actual Maven installation name in Jenkins
+        jdk 'JDK'         // Replace with your actual JDK installation name in Jenkins
     }
 
     stages {
@@ -28,18 +28,18 @@ pipeline {
 
         stage('Run Application') {
             steps {
-                // Automatically run the generated jar
-                sh 'java -jar $(find target -type f -name "*.jar" ! -name "*original*" | head -n 1)'
+                // Run the fat JAR with dependencies
+                sh 'java -jar target/porna-1.0-SNAPSHOT-jar-with-dependencies.jar'
             }
         }
     }
 
     post {
         success {
-            echo 'Build and execution succeeded!'
+            echo '✅ Build and execution succeeded!'
         }
         failure {
-            echo 'Build failed!'
+            echo '❌ Build failed!'
         }
     }
 }
