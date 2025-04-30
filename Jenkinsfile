@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven'     // Replace with your actual Maven installation name in Jenkins
-        jdk 'JDK'         // Replace with your actual JDK installation name in Jenkins
+        maven 'Maven'     // Adjust as per Jenkins tool config
+        jdk 'JDK'         // Adjust as per Jenkins tool config
     }
 
     stages {
@@ -20,6 +20,12 @@ pipeline {
             }
         }
 
+        stage('Debug: List Target Folder') {
+            steps {
+                sh 'ls -lh target'
+            }
+        }
+
         stage('Test') {
             steps {
                 sh 'mvn test'
@@ -28,8 +34,13 @@ pipeline {
 
         stage('Run Application') {
             steps {
-                // Run the fat JAR with dependencies
-                sh 'java -jar target/porna-1.0-SNAPSHOT-jar-with-dependencies.jar'
+                script {
+                    def jarFile = sh(script: 'find target -type f -name "*-jar-with-dependencies.jar" | head -n 1', returnStdout: true).trim()
+                    if (jarFile == "") {
+                        error("❌ Could not find fat JAR file!")
+                    }
+                    sh "java -jar ${jarFile}"
+                }
             }
         }
     }
